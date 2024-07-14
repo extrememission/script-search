@@ -1,124 +1,123 @@
 /* Set global styles */
 body {
-  font-family: "Zeyada", cursive; /* Apply Zeyada font to body */
-  font-weight: 400; /* Normal font weight */
-  font-style: normal; /* Normal font style */
-  background-color: white; /* White background color */
-  color: black; /* Black text color */
-  text-align: center; /* Center-align text */
-  min-height: 100vh; /* Minimum height of viewport */
-  display: flex; /* Use flexbox for layout */
-  flex-direction: column; /* Arrange children in a column */
-  justify-content: center; /* Center children vertically */
-  align-items: center; /* Center children horizontally */
-  font-size: 40px; /* Font size */
-  margin: 0; /* Remove default margin */
+  font-family: "Zeyada", cursive;
+  font-weight: 400;
+  font-style: normal;
+  background-color: white;
+  color: black;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  margin: 0;
 }
 
 /* Style the sticky header */
 .sticky-header {
-  position: sticky; /* Make header sticky */
-  top: 0; /* Stick to top */
-  width: 100%; /* Full width */
-  background-color: white; /* White background color */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow */
-  z-index: 1000; /* Ensure header stays on top */
-  padding: 0; /* No padding */
-  font-family: 'Zeyada', cursive; /* Use Zeyada font */
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 20px 0;
+  font-family: 'Zeyada', cursive;
 }
 
 /* Style the header title */
 .sticky-header h1 {
-  font-size: 40px; /* Font size */
-  letter-spacing: 30%; /* Letter spacing */
-  margin: 0; /* Remove default margin */
-  font-weight: normal; /* Normal font weight */
+  font-size: 40px;
+  letter-spacing: 30%;
+  margin: 0;
 }
 
 /* Style the header content container */
 .header-content {
-  display: flex; /* Use flexbox for layout */
-  align-items: center; /* Center align items vertically */
-  justify-content: center; /* Center align items horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Style the main app container */
 #app {
-  width: 100%; /* Full width */
-  background-color: white; /* White background color */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow */
-  border-radius: 10px; /* Rounded corners */
-  padding: 20px; /* Padding */
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
 }
 
 /* Style the search container */
 .search-container {
-  display: flex; /* Use flexbox for layout */
-  flex-direction: column; /* Arrange children in a column */
-  justify-content: center; /* Center children vertically */
-  align-items: center; /* Center children horizontally */
-  margin-bottom: 20px; /* Space below */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 /* Style the search input field */
 input[type="text"] {
-  width: 80%; /* Width */
-  padding: 10px; /* Padding */
-  text-align: center; /* Center-align text */
-  margin-bottom: 10px; /* Space below */
-  border: 1px solid #ccc; /* Border */
-  border-radius: 5px; /* Rounded corners */
-  outline: none; /* Remove default outline */
+  width: 80%;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
 }
 
 /* Style the loading message */
 #loading-message {
-  margin-top: 0; /* No margin at top */
-  font-size: 1.2em; /* Font size */
+  margin-top: 0;
+  font-size: 1.2em;
 }
 
 /* Style for different types of boxes */
 .box, .book-box, .chapter-box, .verse-box, .result-box {
-  display: flex; /* Use flexbox for layout */
-  justify-content: center; /* Center align items horizontally */
-  align-items: center; /* Center align items vertically */
-  width: 100%; /* Full width */
-  padding: 10px; /* Padding */
-  margin: 10px 0; /* Vertical space */
-  background-color: white; /* White background color */
-  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Add shadow */
-  border-radius: 15px; /* Rounded corners */
-  text-align: center; /* Center-align text */
-  cursor: pointer; /* Pointer cursor */
-  transition: background-color 0.3s ease; /* Smooth background-color change */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 /* Specific styles for book boxes */
 .book-box {
-  background-color: #f0f0f0; /* Light gray background */
+  background-color: #f0f0f0;
 }
 
 /* Specific styles for chapter boxes */
 .chapter-box {
-  background-color: #e9ecef; /* Slightly darker gray */
+  background-color: #e9ecef;
 }
 
 /* Specific styles for verse boxes */
 .verse-box {
-  background-color: #d3d3d3; /* Even darker gray */
+  background-color: #d3d3d3;
 }
 
 /* Specific styles for result boxes */
 .result-box {
-  background-color: #ffffcc; /* Light yellow background */
+  background-color: #ffffcc;
 }
 
 /* Change background color on hover */
 .box:hover {
-  background-color: #f5f5f5; /* Lighter gray on hover */
+  background-color: #f5f5f5;
 }
 
 /* Hide elements with hidden class */
 .hidden {
-  display: none; /* Hide element */
+  display: none;
 }
