@@ -25,6 +25,11 @@ body {
   font-family: 'PT Sans Narrow', sans-serif;
 }
 
+.sticky-header h1 {
+  font-family: "Zeyada", cursive; /* Use the same font as the body */
+  font-size: 60px; /* Adjust the font size as needed */
+}
+
 .header-content {
   display: flex;
   align-items: center;
