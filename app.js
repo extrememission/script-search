@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function createBoxElement(text) {
     const box = document.createElement('div');
     box.className = 'box';
-    box.textContent = text;
+    box.innerHTML = text;
     return box;
   }
 
@@ -88,9 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
     booksContainer.innerHTML = '';
     const verses = getVersesByBookAndChapter(bookId, chapter);
     verses.forEach(verse => {
-      const verseText = `${verse.field[4]}\n${bookNames[bookId]} ${chapter}:${verse.field[3]}`;
+      const verseText = `${verse.field[4]}<br>${bookNames[bookId]} ${chapter}:${verse.field[3]}`;
       const verseBox = createBoxElement(verseText);
       verseBox.classList.add('verse-box');
+      verseBox.addEventListener('click', () => scrollToVerse(verseBox));
       booksContainer.appendChild(verseBox);
     });
   }
@@ -99,6 +100,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return bibleData
       .filter(verse => verse.field[1] === parseInt(bookId) && verse.field[2] === chapter)
       .sort((a, b) => a.field[3] - b.field[3]);
+  }
+
+  function scrollToVerse(verseBox) {
+    // Calculate position relative to the viewport
+    const rect = verseBox.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const targetY = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
+
+    // Smooth scroll animation
+    window.scrollTo({
+      top: targetY,
+      behavior: 'smooth'
+    });
   }
 
   function searchHandler() {
@@ -115,12 +129,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const bookName = bookNames[bookId];
         const chapter = result.field[2];
         const verseNumber = result.field[3];
-        const verseText = result.field[4];
-        const resultBox = createBoxElement(`${verseText}<br>${bookName} ${chapter}:${verseNumber}`);
+        const verseText = `${result.field[4]}<br>${bookName} ${chapter}:${verseNumber}`;
+        const resultBox = createBoxElement(verseText);
         resultBox.classList.add('result-box');
         resultBox.addEventListener('click', () => {
           toggleChapters(bookId);
           toggleVerses(bookId, chapter);
+          setTimeout(() => scrollToVerse(resultBox), 500); // Delay scroll to ensure content is rendered
         });
         booksContainer.appendChild(resultBox);
       });
