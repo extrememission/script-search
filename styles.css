@@ -25,6 +25,16 @@ body {
   font-family: 'PT Sans Narrow', sans-serif;
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favicon {
+  margin-right: 10px;
+}
+
 #app {
   width: 100%;
   background-color: white;
