@@ -23,21 +23,9 @@ body {
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  padding: 20px 0;
+  padding: 0;
   font-family: 'Zeyada', cursive;
 }
-/* Default styles for header image */
-.header-image {
-  max-width: 100%; /* Ensure image is responsive */
-  height: auto; /* Maintain aspect ratio */
-}
-
-/* Media query for mobile devices (up to 768px) */
-@media (max-width: 768px) {
-  .header-image {
-    height: 350px; /* Set specific height for mobile */
-    /* Adjust other styles as needed */
-  }
 
 /* Style the header content container */
 .header-content {
@@ -83,46 +71,33 @@ input[type="text"] {
 
 /* Style for different types of boxes */
 .box, .book-box, .chapter-box, .verse-box, .result-box {
+  position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 10px;
+  padding: 20px; /* Adjust padding as desired */
   margin: 10px 0;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background-color: #f0f0f0; /* Initial background color */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-/* Specific styles for book boxes */
-.book-box {
-  background-color: #f0f0f0;
+/* Flower image styles */
+.box::after, .book-box::after, .chapter-box::after, .verse-box::after, .result-box::after {
+  content: '';
+  position: absolute;
+  bottom: 10px; /* Adjust position as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px; /* Adjust size as needed */
+  height: 20px; /* Adjust size as needed */
+  background-image: url('../images/Frame 1.svg'); /* Path to your SVG image */
+  background-size: cover;
 }
 
-/* Specific styles for chapter boxes */
-.chapter-box {
-  background-color: #e9ecef;
-}
-
-/* Specific styles for verse boxes */
-.verse-box {
-  background-color: #d3d3d3;
-}
-
-/* Specific styles for result boxes */
-.result-box {
-  background-color: #ffffcc;
-}
-
-/* Change background color on hover */
-.box:hover {
-  background-color: #f5f5f5;
-}
-
-/* Hide elements with hidden class */
-.hidden {
-  display: none;
-}
+/* JavaScript will dynamically generate and apply pastel colors */
