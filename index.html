@@ -1,37 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zeyada&display=swap" rel="stylesheet">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-<meta name="msapplication-TileColor" content="#da532c">
-<meta name="theme-color" content="#ffffff">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ScriptSearch</title>
-<link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScriptSearch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zeyada&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: "Zeyada", cursive;
+            font-weight: 400;
+            font-style: normal;
+            background-color: white;
+            color: black;
+            text-align: center;
+            min-height: 100vh; /* Use min-height instead of height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            margin: 0; /* Remove default margin */
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ensure header stays on top */
+            padding: 10px 0; /* Padding on top and bottom */
+            font-family: 'Zeyada', cursive; /* Use the same font as the body */
+        }
+
+        .header-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px; /* Adjust size of the floating image */
+            height: 300px; /* Adjust size of the floating image */
+            transform: translate(-50%, -50%);
+            opacity: 0.5; /* Adjust opacity as desired */
+            animation: twist 30s linear infinite;
+        }
+
+        .header-content h1 {
+            font-size: 40px; /* Adjust the font size as needed */
+            letter-spacing: 10%;
+            margin: 0; /* Remove default margin */
+            position: relative; /* Ensure text is above the background */
+            z-index: 1; /* Ensure text is above the background */
+        }
+
+        @keyframes twist {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-  <header class="sticky-header">
-  <div class="header-content">
-    <img src="/favicon-32x32.png" alt="Favicon" class="favicon">
-    <h1>ScriptSearch</h1>
-    <img src="/favicon-32x32.png" alt="Favicon" class="favicon mirrored">
-  </div>
-</header>
-  <div id="app">
-    <div class="search-container">
-      <input type="text" id="search" placeholder="Search...">
-      <div id="loading-message" class="hidden">Loading...</div>
+    <header class="sticky-header">
+        <div class="header-content">
+            <!-- SVG as background image -->
+            <img src="images/Frame 1.svg" alt="Floating Image" class="header-background">
+            <!-- Title -->
+            <h1>ScriptSearch</h1>
+        </div>
+    </header>
+    <div id="app">
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Search...">
+            <div id="loading-message" class="hidden">Loading...</div>
+        </div>
+        <div id="books"></div>
     </div>
-    <div id="books"></div>
-  </div>
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
