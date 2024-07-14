@@ -7,9 +7,22 @@ body {
   text-align: center;
   min-height: 100vh; /* Use min-height instead of height */
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size: 40px;
+  margin: 0; /* Remove default margin */
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure header stays on top */
+  padding: 10px 0;
+  font-family: 'PT Sans Narrow', sans-serif;
 }
 
 #app {
