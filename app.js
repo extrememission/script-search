@@ -103,17 +103,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function scrollToVerse(verseBox) {
-    // Calculate position relative to the viewport
-    const rect = verseBox.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const targetY = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
+  const rect = verseBox.getBoundingClientRect();
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const targetY = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
 
-    // Smooth scroll animation
-    window.scrollTo({
-      top: targetY,
-      behavior: 'smooth'
-    });
-  }
+  // Smooth scroll animation
+  window.scrollTo({
+    top: targetY,
+    behavior: 'smooth'
+  });
+}
+
 
   function searchHandler() {
     const searchTerm = searchInput.value.trim().toLowerCase();
