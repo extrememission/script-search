@@ -28,6 +28,7 @@ body {
 .sticky-header h1 {
   font-family: "Zeyada", cursive; /* Use the same font as the body */
   font-size: 30px; /* Adjust the font size as needed */
+  letter-spacing: 10%;
   margin: 0; /* Remove default margin */
 }
 
