@@ -32,7 +32,11 @@ body {
 }
 
 .favicon {
-  margin-right: 10px;
+  margin: 0 10px;
+}
+
+.mirrored {
+  transform: scaleX(-1);
 }
 
 #app {
