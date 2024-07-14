@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScriptSearch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Zeyada&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="sticky-header">
+    <div class="header-content">
+      <!-- Replace with header image -->
+      <img src="images/header.png" alt="Header Image" class="header-image">
+    </div>
+  </header>
+  <div id="app">
+    <div class="search-container">
+      <input type="text" id="search" placeholder="Search...">
+      <div id="loading-message" class="hidden">Loading...</div>
+    </div>
+    <div id="books"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScriptSearch</title>
