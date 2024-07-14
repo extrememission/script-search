@@ -26,12 +26,18 @@ body {
   padding: 20px 0;
   font-family: 'Zeyada', cursive;
 }
-
+/* Default styles for header image */
 .header-image {
-    max-width: 100%; /* Adjust maximum width as needed */
-    height: auto; /* Maintain aspect ratio */
-    /* Add additional styling if necessary */
+  max-width: 100%; /* Ensure image is responsive */
+  height: auto; /* Maintain aspect ratio */
 }
+
+/* Media query for mobile devices (up to 768px) */
+@media (max-width: 768px) {
+  .header-image {
+    height: 350px; /* Set specific height for mobile */
+    /* Adjust other styles as needed */
+  }
 
 /* Style the header content container */
 .header-content {
