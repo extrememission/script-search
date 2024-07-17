@@ -58,12 +58,6 @@ input[type="text"] {
   outline: none;
 }
 
-/* Style the loading message */
-#loading-message {
-  margin-top: 0;
-  font-size: 1.2em;
-}
-
 /* Style for different types of boxes */
 .box, .book-box, .chapter-box, .verse-box, .result-box {
   position: relative;
