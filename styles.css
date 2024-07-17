@@ -1,6 +1,8 @@
 /* Set global styles */
 body {
   font-family: "Zeyada", cursive;
+  font-weight: 400;
+  font-style: normal;
   background-color: white;
   color: black;
   text-align: center;
@@ -9,6 +11,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 40px;
   margin: 0;
 }
 
@@ -41,6 +44,12 @@ input[type="text"] {
   outline: none;
 }
 
+/* Style the loading message */
+#loading-message {
+  margin-top: 0;
+  font-size: 1.2em;
+}
+
 /* Style for different types of boxes */
 .box, .book-box, .chapter-box, .verse-box, .result-box {
   position: relative;
@@ -49,25 +58,12 @@ input[type="text"] {
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 20px;
+  padding: 20px; /* Adjust padding as desired */
   margin: 10px 0;
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; /* Initial background color */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
-/* Flower image styles */
-.box::after, .book-box::after, .chapter-box::after, .verse-box::after, .result-box::after {
-  content: '';
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
-  background-image: url('../images/Frame 1.svg');
-  background-size: cover;
 }
