@@ -12,23 +12,6 @@ body {
   margin: 0;
 }
 
-/* Style the sticky header */
-.sticky-header {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-}
-
-/* Style the header content container */
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* Style the main app container */
 #app {
   width: 100%;
