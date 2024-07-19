@@ -22,8 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     65: 'Jude', 66: 'Revelation'
   };
 
-  loadingMessage.classList.remove('hidden');
-
   fetch('data/kjv.json')
     .then(response => response.json())
     .then(data => {
