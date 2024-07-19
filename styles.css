@@ -1,26 +1,24 @@
 /* Set global styles */
 body {
-  font-family: "Zeyada", cursive;
+  font-family: "Rubik Mono One", monospace;
   font-weight: 400;
   font-style: normal;
   background-color: white;
-  color: black;
+  color: white;
   text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 40px;
   margin: 0;
 }
 
 /* Style the main app container */
 #app {
-  width: 100%;
+  width: 90%;
   background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 20px;
 }
 
@@ -44,26 +42,16 @@ input[type="text"] {
   outline: none;
 }
 
-/* Style the loading message */
-#loading-message {
-  margin-top: 0;
-  font-size: 1.2em;
-}
-
 /* Style for different types of boxes */
 .box, .book-box, .chapter-box, .verse-box, .result-box {
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  padding: 20px; /* Adjust padding as desired */
+  padding: 20px;
   margin: 10px 0;
-  background-color: #f0f0f0; /* Initial background color */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
+  background-color: #000000;
+  border-radius: 5px;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
