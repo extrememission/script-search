@@ -115,7 +115,9 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
 
   // Handle the search functionality
   function searchHandler() {
-    const searchTerm = searchInput.value.trim().toLowerCase(); // Get and trim the search term
+    // const searchTerm = searchInput.value.trim().toLowerCase(); // Get and trim the search term
+    const searchTerm = searchInput.value.toLowerCase();
+
     if (!searchTerm) return; // Return if the search term is empty
     loadingMessage.classList.remove('hidden'); // Show the loading message
     booksContainer.innerHTML = ''; // Clear the books container
