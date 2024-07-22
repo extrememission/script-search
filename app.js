@@ -115,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
 
   // Handle the search functionality
   function searchHandler() {
-    // const searchTerm = searchInput.value.trim().toLowerCase(); // Get and trim the search term
     const searchTerm = searchInput.value.toLowerCase();
 
     if (!searchTerm) return; // Return if the search term is empty
@@ -123,13 +122,16 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
     booksContainer.innerHTML = ''; // Clear the books container
     setTimeout(() => {
       const results = bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm)); // Filter the verses by search term
+      const highlightTerm = new RegExp(`(${searchTerm})`, 'gi'); // Create a regex to match the search term
+
       results.forEach(result => { // Iterate over search results
         const bookId = result.field[1]; // Get the book ID
         const bookName = bookNames[bookId]; // Get the book name
         const chapter = result.field[2]; // Get the chapter number
         const verseNumber = result.field[3]; // Get the verse number
-        const verseText = `${result.field[4]}<br>${bookName} ${chapter}:${verseNumber}`; // Create the verse text
-        const resultBox = createBoxElement(verseText); // Create a box element for the result
+        const verseText = result.field[4].replace(highlightTerm, '<span class="highlight">$1</span>'); // Highlight the search term in the verse text
+        const fullText = `${verseText}<br>${bookName} ${chapter}:${verseNumber}`; // Create the full text
+        const resultBox = createBoxElement(fullText); // Create a box element for the result
         resultBox.classList.add('result-box'); // Add a class to the result box
         resultBox.addEventListener('click', () => { // Add click event to handle search result click
           toggleChapters(bookId); // Toggle chapters for the book
