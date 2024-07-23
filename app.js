@@ -71,6 +71,25 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
       chapterBox.classList.add('chapter-box'); // Add a class to the chapter box
       chapterBox.dataset.chapter = chapter; // Set the chapter number as a data attribute
       chapterBox.addEventListener('click', () => toggleVerses(bookId, chapter)); // Add click event to toggle verses
+
+      // Add event listener for right-click to go back to the list of books
+      chapterBox.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        displayBooks(); // Display the list of books
+      });
+
+      // Add event listener for long press to go back to the list of books (for mobile)
+      let longPressTimer;
+      chapterBox.addEventListener('touchstart', () => {
+        longPressTimer = setTimeout(() => {
+          displayBooks(); // Display the list of books
+        }, 500); // Long press duration (500ms)
+      });
+
+      chapterBox.addEventListener('touchend', () => {
+        clearTimeout(longPressTimer); // Clear the timeout if touch ends before long press duration
+      });
+
       booksContainer.appendChild(chapterBox); // Append the chapter box to the container
     });
   }
@@ -95,10 +114,12 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
       const verseBox = createBoxElement(verseText); // Create a box element for the verse
       verseBox.classList.add('verse-box'); // Add a class to the verse box
       verseBox.dataset.verse = verse.field[3]; // Set the verse number as a data attribute
-
+      
       verseBox.addEventListener('click', () => toggleChapters(bookId)); // Add event listener for left-click to toggle chapters
-      verseBox.addEventListener('contextmenu', (event) => { // Add event listener for right-click to copy verse text to clipboard
-        event.preventDefault(); // Prevent the default context menu from appearing
+      
+      // Add event listener for right-click to copy verse text to clipboard
+      verseBox.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
         navigator.clipboard.writeText(`${verse.field[4]} - ${bookNames[bookId]} ${chapter}:${verse.field[3]}`)
           .then(() => {
             alert('Verse copied to clipboard');
@@ -106,6 +127,24 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
           .catch(err => {
             console.error('Failed to copy text: ', err);
           });
+      });
+
+      // Add event listener for long press to copy verse text to clipboard (for mobile)
+      let longPressTimer;
+      verseBox.addEventListener('touchstart', () => {
+        longPressTimer = setTimeout(() => {
+          navigator.clipboard.writeText(`${verse.field[4]} - ${bookNames[bookId]} ${chapter}:${verse.field[3]}`)
+            .then(() => {
+              alert('Verse copied to clipboard');
+            })
+            .catch(err => {
+              console.error('Failed to copy text: ', err);
+            });
+        }, 500); // Long press duration (500ms)
+      });
+
+      verseBox.addEventListener('touchend', () => {
+        clearTimeout(longPressTimer); // Clear the timeout if touch ends before long press duration
       });
 
       booksContainer.appendChild(verseBox); // Append the verse box to the container
@@ -119,41 +158,44 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
     }
   }
 
-
   // Get the verses for a given book and chapter
   function getVersesByBookAndChapter(bookId, chapter) {
-    return bibleData
-      .filter(verse => verse.field[1] === parseInt(bookId) && verse.field[2] === chapter) // Filter the verses by book and chapter
-      .sort((a, b) => a.field[3] - b.field[3]); // Sort the verses by verse number
+    return bibleData.filter(verse => verse.field[1] === parseInt(bookId) && verse.field[2] === parseInt(chapter)); // Return the filtered verses
   }
 
-  // Handle the search functionality
+  // Search handler for finding and displaying matching verses
   function searchHandler() {
-    const searchTerm = searchInput.value.toLowerCase();
+    const searchTerm = searchInput.value.trim(); // Get the search term from input
+    if (searchTerm === '') { // Check if the search term is empty
+      alert('Please enter a search term.'); // Show an alert message
+      return; // Exit the function
+    }
 
-    if (!searchTerm) return; // Return if the search term is empty
-    loadingMessage.classList.remove('hidden'); // Show the loading message
+    const searchResults = searchVerses(searchTerm); // Search for matching verses
+    displaySearchResults(searchResults); // Display the search results
+  }
+
+  // Search for matching verses based on the search term
+  function searchVerses(searchTerm) {
+    return bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm.toLowerCase())); // Return the filtered verses
+  }
+
+  // Display the search results
+  function displaySearchResults(results) {
     booksContainer.innerHTML = ''; // Clear the books container
-    setTimeout(() => {
-      const results = bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm)); // Filter the verses by search term
-      const highlightTerm = new RegExp(`(${searchTerm})`, 'gi'); // Create a regex to match the search term
+    if (results.length === 0) { // Check if there are no results
+      booksContainer.innerHTML = '<div>No results found.</div>'; // Show a no results message
+      return; // Exit the function
+    }
 
-      results.forEach(result => { // Iterate over search results
-        const bookId = result.field[1]; // Get the book ID
-        const bookName = bookNames[bookId]; // Get the book name
-        const chapter = result.field[2]; // Get the chapter number
-        const verseNumber = result.field[3]; // Get the verse number
-        const verseText = result.field[4].replace(highlightTerm, '<span class="highlight">$1</span>'); // Highlight the search term in the verse text
-        const fullText = `${verseText}<br>${bookName} ${chapter}:${verseNumber}`; // Create the full text
-        const resultBox = createBoxElement(fullText); // Create a box element for the result
-        resultBox.classList.add('result-box'); // Add a class to the result box
-        resultBox.addEventListener('click', () => { // Add click event to handle search result click
-          toggleChapters(bookId); // Toggle chapters for the book
-          toggleVerses(bookId, chapter, verseNumber); // Toggle verses for the chapter and scroll to the verse
-        });
-        booksContainer.appendChild(resultBox); // Append the result box to the container
+    results.forEach(result => { // Iterate over search results
+      const verseText = `${result.field[4]}<br>${bookNames[result.field[1]]} ${result.field[2]}:${result.field[3]}`; // Create the verse text
+      const verseBox = createBoxElement(verseText); // Create a box element for the verse
+      verseBox.classList.add('verse-box'); // Add a class to the verse box
+      verseBox.addEventListener('click', () => { // Add click event listener
+        toggleVerses(result.field[1], result.field[2], result.field[3]); // Toggle the verses
       });
-      loadingMessage.classList.add('hidden'); // Hide the loading message
-    }, 500);
+      booksContainer.appendChild(verseBox); // Append the verse box to the container
+    });
   }
 });
