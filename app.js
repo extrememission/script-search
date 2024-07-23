@@ -40,12 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
       loadingMessage.textContent = 'Error loading data. Please try again later.';
     });
 
+  function createBoxElement(text) {
+    const box = document.createElement('div');
+    box.className = 'box';
+    box.innerHTML = text;
+    return box;
+  }
+
   function displayBooks() {
     booksContainer.innerHTML = '';
     for (const bookId in bookNames) {
       const bookName = bookNames[bookId];
       const bookBox = createBoxElement(bookName);
       bookBox.classList.add('book-box');
+      bookBox.style.userSelect = 'none'; // Make text unelectable
       bookBox.dataset.bookId = bookId;
       bookBox.addEventListener('click', () => toggleChapters(bookId));
 
@@ -60,19 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function createBoxElement(text) {
-    const box = document.createElement('div');
-    box.className = 'box';
-    box.innerHTML = text;
-    return box;
-  }
-
   function toggleChapters(bookId) {
     booksContainer.innerHTML = '';
     const chapters = getChaptersByBookId(bookId);
     chapters.forEach(chapter => {
       const chapterBox = createBoxElement(`Chapter ${chapter}`);
       chapterBox.classList.add('chapter-box');
+      chapterBox.style.userSelect = 'none'; // Make text unelectable
       chapterBox.dataset.chapter = chapter;
       chapterBox.addEventListener('click', () => toggleVerses(bookId, chapter));
 
@@ -106,13 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
       verseBox.classList.add('verse-box');
       verseBox.dataset.verse = verse.field[3];
 
-      // Right-click handler for verses
+      // Right-click and long press handler for verses
       verseBox.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        toggleChapters(bookId, chapter); // Go back to the list of chapters
+        toggleChapters(bookId); // Go back to the list of chapters
       });
-
-      // Long press handler for verses
       verseBox.addEventListener('touchstart', handleLongPress('verse', bookId, chapter));
 
       booksContainer.appendChild(verseBox);
@@ -163,16 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
   }
 
-  function handleLongPress(type, bookId = null, chapter = null) {
+  function handleLongPress(type, bookId, chapter) {
     let timer;
     const threshold = 500;
 
     return function (e) {
       if (e.type === 'touchstart') {
         timer = setTimeout(() => {
-          if (type === 'verse' && bookId && chapter) {
+          if (type === 'verse') {
             toggleChapters(bookId); // Go back to the list of chapters
-          } else if (type === 'chapter' && bookId) {
+          } else if (type === 'chapter') {
             displayBooks(); // Go back to the list of books
           }
         }, threshold);
