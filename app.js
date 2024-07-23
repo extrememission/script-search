@@ -1,10 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to load
-  const booksContainer = document.getElementById('books'); // Get the container for displaying books
-  const searchInput = document.getElementById('search'); // Get the search input field
-  const bibleData = []; // Initialize an array to store Bible data
-  const loadingMessage = document.getElementById('loading-message'); // Get the loading message element
+document.addEventListener('DOMContentLoaded', () => {
+  const booksContainer = document.getElementById('books');
+  const searchInput = document.getElementById('search');
+  const bibleData = [];
+  const loadingMessage = document.getElementById('loading-message');
 
-  // Mapping of book IDs to book names
   const bookNames = {
     1: 'Genesis', 2: 'Exodus', 3: 'Leviticus', 4: 'Numbers', 5: 'Deuteronomy',
     6: 'Joshua', 7: 'Judges', 8: 'Ruth', 9: '1 Samuel', 10: '2 Samuel',
@@ -23,179 +22,164 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
     65: 'Jude', 66: 'Revelation'
   };
 
-  // Fetch the Bible data from a JSON file
   fetch('data/kjv.json')
-    .then(response => response.json()) // Parse the response as JSON
+    .then(response => response.json())
     .then(data => {
-      bibleData.push(...data.resultset.row); // Store the fetched data in bibleData array
-      loadingMessage.classList.add('hidden'); // Hide the loading message
-      displayBooks(); // Display the list of books
-      searchInput.addEventListener('keydown', event => { // Add event listener for search input
-        if (event.key === 'Enter') { // Check if the Enter key was pressed
-          searchHandler(); // Call the search handler
+      bibleData.push(...data.resultset.row);
+      loadingMessage.classList.add('hidden');
+      displayBooks();
+
+      searchInput.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+          searchHandler();
         }
       });
     })
-    .catch(error => { // Handle errors during data fetching
-      console.error('Error fetching Bible data:', error); // Log the error to the console
-      loadingMessage.textContent = 'Error loading data. Please try again later.'; // Show an error message
+    .catch(error => {
+      console.error('Error fetching Bible data:', error);
+      loadingMessage.textContent = 'Error loading data. Please try again later.';
     });
 
-  // Display the list of books
   function displayBooks() {
-    booksContainer.innerHTML = ''; // Clear the books container
-    for (const bookId in bookNames) { // Iterate over book names
-      const bookName = bookNames[bookId]; // Get the book name
-      const bookBox = createBoxElement(bookName); // Create a box element for the book
-      bookBox.classList.add('book-box'); // Add a class to the book box
-      bookBox.dataset.bookId = bookId; // Set the book ID as a data attribute
-      bookBox.addEventListener('click', () => toggleChapters(bookId)); // Add click event to toggle chapters
-      booksContainer.appendChild(bookBox); // Append the book box to the container
+    booksContainer.innerHTML = '';
+    for (const bookId in bookNames) {
+      const bookName = bookNames[bookId];
+      const bookBox = createBoxElement(bookName);
+      bookBox.classList.add('book-box');
+      bookBox.dataset.bookId = bookId;
+      bookBox.addEventListener('click', () => toggleChapters(bookId));
+
+      // Handle right-click and long press for books
+      bookBox.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        displayBooks(); // Go back to the list of books
+      });
+      bookBox.addEventListener('touchstart', handleLongPress.bind(null, 'book'));
+
+      booksContainer.appendChild(bookBox);
     }
   }
 
-  // Create a box element with given text
   function createBoxElement(text) {
-    const box = document.createElement('div'); // Create a div element
-    box.className = 'box'; // Set the class name
-    box.innerHTML = text; // Set the inner HTML to the provided text
-    return box; // Return the created box element
+    const box = document.createElement('div');
+    box.className = 'box';
+    box.innerHTML = text;
+    return box;
   }
 
-  // Toggle the display of chapters for a given book
   function toggleChapters(bookId) {
-    booksContainer.innerHTML = ''; // Clear the books container
-    const chapters = getChaptersByBookId(bookId); // Get the chapters for the book
-    chapters.forEach(chapter => { // Iterate over chapters
-      const chapterBox = createBoxElement(`Chapter ${chapter}`); // Create a box element for the chapter
-      chapterBox.classList.add('chapter-box'); // Add a class to the chapter box
-      chapterBox.dataset.chapter = chapter; // Set the chapter number as a data attribute
-      chapterBox.addEventListener('click', () => toggleVerses(bookId, chapter)); // Add click event to toggle verses
+    booksContainer.innerHTML = '';
+    const chapters = getChaptersByBookId(bookId);
+    chapters.forEach(chapter => {
+      const chapterBox = createBoxElement(`Chapter ${chapter}`);
+      chapterBox.classList.add('chapter-box');
+      chapterBox.dataset.chapter = chapter;
+      chapterBox.addEventListener('click', () => toggleVerses(bookId, chapter));
 
-      // Add event listener for right-click to go back to the list of books
-      chapterBox.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        displayBooks(); // Display the list of books
+      // Handle right-click and long press for chapters
+      chapterBox.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        displayBooks(); // Go back to the list of books
       });
+      chapterBox.addEventListener('touchstart', handleLongPress.bind(null, 'chapter', bookId));
 
-      // Add event listener for long press to go back to the list of books (for mobile)
-      let longPressTimer;
-      chapterBox.addEventListener('touchstart', () => {
-        longPressTimer = setTimeout(() => {
-          displayBooks(); // Display the list of books
-        }, 500); // Long press duration (500ms)
-      });
-
-      chapterBox.addEventListener('touchend', () => {
-        clearTimeout(longPressTimer); // Clear the timeout if touch ends before long press duration
-      });
-
-      booksContainer.appendChild(chapterBox); // Append the chapter box to the container
+      booksContainer.appendChild(chapterBox);
     });
   }
 
-  // Get the chapters for a given book ID
   function getChaptersByBookId(bookId) {
-    const chapters = new Set(); // Create a set to store chapters
-    bibleData.forEach(verse => { // Iterate over bible data
-      if (verse.field[1] === parseInt(bookId)) { // Check if the verse belongs to the book
-        chapters.add(verse.field[2]); // Add the chapter to the set
+    const chapters = new Set();
+    bibleData.forEach(verse => {
+      if (verse.field[1] === parseInt(bookId)) {
+        chapters.add(verse.field[2]);
       }
     });
-    return Array.from(chapters).sort((a, b) => a - b); // Return the sorted array of chapters
+    return Array.from(chapters).sort((a, b) => a - b);
   }
 
-  // Toggle the display of verses for a given book and chapter
   function toggleVerses(bookId, chapter, targetVerseNumber = null) {
-    booksContainer.innerHTML = ''; // Clear the books container
-    const verses = getVersesByBookAndChapter(bookId, chapter); // Get the verses for the book and chapter
-    verses.forEach(verse => { // Iterate over verses
-      const verseText = `${verse.field[4]}<br>${bookNames[bookId]} ${chapter}:${verse.field[3]}`; // Create the verse text
-      const verseBox = createBoxElement(verseText); // Create a box element for the verse
-      verseBox.classList.add('verse-box'); // Add a class to the verse box
-      verseBox.dataset.verse = verse.field[3]; // Set the verse number as a data attribute
-      
-      verseBox.addEventListener('click', () => toggleChapters(bookId)); // Add event listener for left-click to toggle chapters
-      
-      // Add event listener for right-click to copy verse text to clipboard
-      verseBox.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        navigator.clipboard.writeText(`${verse.field[4]} - ${bookNames[bookId]} ${chapter}:${verse.field[3]}`)
-          .then(() => {
-            alert('Verse copied to clipboard');
-          })
-          .catch(err => {
-            console.error('Failed to copy text: ', err);
-          });
-      });
+    booksContainer.innerHTML = '';
+    const verses = getVersesByBookAndChapter(bookId, chapter);
+    verses.forEach(verse => {
+      const verseText = `${verse.field[4]}<br>${bookNames[bookId]} ${chapter}:${verse.field[3]}`;
+      const verseBox = createBoxElement(verseText);
+      verseBox.classList.add('verse-box');
+      verseBox.dataset.verse = verse.field[3];
 
-      // Add event listener for long press to copy verse text to clipboard (for mobile)
-      let longPressTimer;
-      verseBox.addEventListener('touchstart', () => {
-        longPressTimer = setTimeout(() => {
-          navigator.clipboard.writeText(`${verse.field[4]} - ${bookNames[bookId]} ${chapter}:${verse.field[3]}`)
-            .then(() => {
-              alert('Verse copied to clipboard');
-            })
-            .catch(err => {
-              console.error('Failed to copy text: ', err);
-            });
-        }, 500); // Long press duration (500ms)
+      // Handle right-click and long press for verses
+      verseBox.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        navigator.clipboard.writeText(verseText).then(() => {
+          alert('Verse copied to clipboard!');
+        });
       });
+      verseBox.addEventListener('touchstart', handleLongPress.bind(null, 'verse', verseText));
 
-      verseBox.addEventListener('touchend', () => {
-        clearTimeout(longPressTimer); // Clear the timeout if touch ends before long press duration
-      });
-
-      booksContainer.appendChild(verseBox); // Append the verse box to the container
+      booksContainer.appendChild(verseBox);
     });
 
-    if (targetVerseNumber !== null) { // Check if a target verse number is provided
-      const targetVerseBox = booksContainer.querySelector(`[data-verse="${targetVerseNumber}"]`); // Find the target verse box
-      if (targetVerseBox) { // Check if the target verse box exists
-        targetVerseBox.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll the target verse box into view
+    if (targetVerseNumber !== null) {
+      const targetVerseBox = booksContainer.querySelector(`[data-verse="${targetVerseNumber}"]`);
+      if (targetVerseBox) {
+        targetVerseBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   }
 
-  // Get the verses for a given book and chapter
   function getVersesByBookAndChapter(bookId, chapter) {
-    return bibleData.filter(verse => verse.field[1] === parseInt(bookId) && verse.field[2] === parseInt(chapter)); // Return the filtered verses
+    return bibleData
+      .filter(verse => verse.field[1] === parseInt(bookId) && verse.field[2] === chapter)
+      .sort((a, b) => a.field[3] - b.field[3]);
   }
 
-  // Search handler for finding and displaying matching verses
   function searchHandler() {
-    const searchTerm = searchInput.value.trim(); // Get the search term from input
-    if (searchTerm === '') { // Check if the search term is empty
-      alert('Please enter a search term.'); // Show an alert message
-      return; // Exit the function
-    }
+    const searchTerm = searchInput.value.toLowerCase();
 
-    const searchResults = searchVerses(searchTerm); // Search for matching verses
-    displaySearchResults(searchResults); // Display the search results
-  }
+    if (!searchTerm) return;
+    loadingMessage.classList.remove('hidden');
+    booksContainer.innerHTML = '';
+    setTimeout(() => {
+      const results = bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm));
+      const highlightTerm = new RegExp(`(${searchTerm})`, 'gi');
 
-  // Search for matching verses based on the search term
-  function searchVerses(searchTerm) {
-    return bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm.toLowerCase())); // Return the filtered verses
-  }
-
-  // Display the search results
-  function displaySearchResults(results) {
-    booksContainer.innerHTML = ''; // Clear the books container
-    if (results.length === 0) { // Check if there are no results
-      booksContainer.innerHTML = '<div>No results found.</div>'; // Show a no results message
-      return; // Exit the function
-    }
-
-    results.forEach(result => { // Iterate over search results
-      const verseText = `${result.field[4]}<br>${bookNames[result.field[1]]} ${result.field[2]}:${result.field[3]}`; // Create the verse text
-      const verseBox = createBoxElement(verseText); // Create a box element for the verse
-      verseBox.classList.add('verse-box'); // Add a class to the verse box
-      verseBox.addEventListener('click', () => { // Add click event listener
-        toggleVerses(result.field[1], result.field[2], result.field[3]); // Toggle the verses
+      results.forEach(result => {
+        const bookId = result.field[1];
+        const bookName = bookNames[bookId];
+        const chapter = result.field[2];
+        const verseNumber = result.field[3];
+        const verseText = result.field[4].replace(highlightTerm, '<span class="highlight">$1</span>');
+        const fullText = `${verseText}<br>${bookName} ${chapter}:${verseNumber}`;
+        const resultBox = createBoxElement(fullText);
+        resultBox.classList.add('result-box');
+        resultBox.addEventListener('click', () => {
+          toggleChapters(bookId);
+          toggleVerses(bookId, chapter, verseNumber);
+        });
+        booksContainer.appendChild(resultBox);
       });
-      booksContainer.appendChild(verseBox); // Append the verse box to the container
-    });
+      loadingMessage.classList.add('hidden');
+    }, 500);
+  }
+
+  function handleLongPress(type, data) {
+    let timer;
+    const threshold = 500;
+
+    return function (e) {
+      if (e.type === 'touchstart') {
+        timer = setTimeout(() => {
+          if (type === 'verse') {
+            navigator.clipboard.writeText(data).then(() => {
+              alert('Verse copied to clipboard!');
+            });
+          } else if (type === 'chapter') {
+            displayBooks();
+          }
+        }, threshold);
+
+        e.target.addEventListener('touchend', () => clearTimeout(timer), { once: true });
+        e.target.addEventListener('touchcancel', () => clearTimeout(timer), { once: true });
+      }
+    };
   }
 });
