@@ -132,34 +132,36 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((a, b) => a.field[3] - b.field[3]);
   }
 
-  function searchHandler() {
-    const searchTerm = searchInput.value.toLowerCase();
+function searchHandler() {
+  const searchTerm = searchInput.value.toLowerCase();
 
-    if (!searchTerm) return;
-    loadingMessage.classList.remove('hidden');
-    booksContainer.innerHTML = '';
-    setTimeout(() => {
-      const results = bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm));
-      const highlightTerm = new RegExp(`(${searchTerm})`, 'gi');
+  if (!searchTerm) return;
+  loadingMessage.classList.remove('hidden');
+  booksContainer.innerHTML = '';
+  setTimeout(() => {
+    const results = bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm));
+    const highlightTerm = new RegExp(`(${searchTerm})`, 'gi');
 
-      results.forEach(result => {
-        const bookId = result.field[1];
-        const bookName = bookNames[bookId];
-        const chapter = result.field[2];
-        const verseNumber = result.field[3];
-        const verseText = result.field[4].replace(highlightTerm, '<span class="highlight">$1</span>');
-        const fullText = `${verseText}<br>${bookName} ${chapter}:${verseNumber}`;
-        const resultBox = createBoxElement(fullText);
-        resultBox.classList.add('result-box');
-        resultBox.addEventListener('click', () => {
-          toggleChapters(bookId);
-          toggleVerses(bookId, chapter, verseNumber);
-        });
-        booksContainer.appendChild(resultBox);
+    alert(`Found ${results.length} results for "${searchTerm}"`);
+
+    results.forEach(result => {
+      const bookId = result.field[1];
+      const bookName = bookNames[bookId];
+      const chapter = result.field[2];
+      const verseNumber = result.field[3];
+      const verseText = result.field[4].replace(highlightTerm, '<span class="highlight">$1</span>');
+      const fullText = `${verseText}<br>${bookName} ${chapter}:${verseNumber}`;
+      const resultBox = createBoxElement(fullText);
+      resultBox.classList.add('result-box');
+      resultBox.addEventListener('click', () => {
+        toggleChapters(bookId);
+        toggleVerses(bookId, chapter, verseNumber);
       });
-      loadingMessage.classList.add('hidden');
-    }, 500);
-  }
+      booksContainer.appendChild(resultBox);
+    });
+    loadingMessage.classList.add('hidden');
+  }, 500);
+}
 
   function handleLongPress(type, data) {
     let timer;
