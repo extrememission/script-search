@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
           alert('Verse copied to clipboard!');
         });
       });
-      verseBox.addEventListener('touchstart', handleLongPress.bind(null, 'verse', verseText));
+      verseBox.addEventListener('touchstart', handleLongPress.bind(null, 'verse', bookId, chapter));
 
       booksContainer.appendChild(verseBox);
     });
@@ -132,38 +132,38 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((a, b) => a.field[3] - b.field[3]);
   }
 
-function searchHandler() {
-  const searchTerm = searchInput.value.toLowerCase();
+  function searchHandler() {
+    const searchTerm = searchInput.value.toLowerCase();
 
-  if (!searchTerm) return;
-  loadingMessage.classList.remove('hidden');
-  booksContainer.innerHTML = '';
-  setTimeout(() => {
-    const results = bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm));
-    const highlightTerm = new RegExp(`(${searchTerm})`, 'gi');
+    if (!searchTerm) return;
+    loadingMessage.classList.remove('hidden');
+    booksContainer.innerHTML = '';
+    setTimeout(() => {
+      const results = bibleData.filter(verse => verse.field[4].toLowerCase().includes(searchTerm));
+      const highlightTerm = new RegExp(`(${searchTerm})`, 'gi');
 
-    alert(`Found ${results.length} results for "${searchTerm}"`);
+      alert(`Found ${results.length} results for "${searchTerm}"`);
 
-    results.forEach(result => {
-      const bookId = result.field[1];
-      const bookName = bookNames[bookId];
-      const chapter = result.field[2];
-      const verseNumber = result.field[3];
-      const verseText = result.field[4].replace(highlightTerm, '<span class="highlight">$1</span>');
-      const fullText = `${verseText}<br>${bookName} ${chapter}:${verseNumber}`;
-      const resultBox = createBoxElement(fullText);
-      resultBox.classList.add('result-box');
-      resultBox.addEventListener('click', () => {
-        toggleChapters(bookId);
-        toggleVerses(bookId, chapter, verseNumber);
+      results.forEach(result => {
+        const bookId = result.field[1];
+        const bookName = bookNames[bookId];
+        const chapter = result.field[2];
+        const verseNumber = result.field[3];
+        const verseText = result.field[4].replace(highlightTerm, '<span class="highlight">$1</span>');
+        const fullText = `${verseText}<br>${bookName} ${chapter}:${verseNumber}`;
+        const resultBox = createBoxElement(fullText);
+        resultBox.classList.add('result-box');
+        resultBox.addEventListener('click', () => {
+          toggleChapters(bookId);
+          toggleVerses(bookId, chapter, verseNumber);
+        });
+        booksContainer.appendChild(resultBox);
       });
-      booksContainer.appendChild(resultBox);
-    });
-    loadingMessage.classList.add('hidden');
-  }, 500);
-}
+      loadingMessage.classList.add('hidden');
+    }, 500);
+  }
 
-  function handleLongPress(type, data) {
+  function handleLongPress(type, bookId, chapter) {
     let timer;
     const threshold = 500;
 
@@ -171,11 +171,9 @@ function searchHandler() {
       if (e.type === 'touchstart') {
         timer = setTimeout(() => {
           if (type === 'verse') {
-            navigator.clipboard.writeText(data).then(() => {
-              alert('Verse copied to clipboard!');
-            });
+            toggleChapters(bookId); // Go back to the list of chapters
           } else if (type === 'chapter') {
-            displayBooks();
+            displayBooks(); // Go back to the list of books
           }
         }, threshold);
 
