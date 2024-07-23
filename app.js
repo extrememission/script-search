@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
       bookBox.dataset.bookId = bookId;
       bookBox.addEventListener('click', () => toggleChapters(bookId));
 
-      // Handle right-click and long press for books
+      // Long press and right-click handler for books
+      bookBox.addEventListener('touchstart', handleLongPress('book'));
       bookBox.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         displayBooks(); // Go back to the list of books
       });
-      bookBox.addEventListener('touchstart', handleLongPress.bind(null, 'book'));
 
       booksContainer.appendChild(bookBox);
     }
@@ -76,12 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
       chapterBox.dataset.chapter = chapter;
       chapterBox.addEventListener('click', () => toggleVerses(bookId, chapter));
 
-      // Handle right-click and long press for chapters
+      // Long press and right-click handler for chapters
+      chapterBox.addEventListener('touchstart', handleLongPress('chapter', bookId));
       chapterBox.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         displayBooks(); // Go back to the list of books
       });
-      chapterBox.addEventListener('touchstart', handleLongPress.bind(null, 'chapter', bookId));
 
       booksContainer.appendChild(chapterBox);
     });
@@ -106,14 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
       verseBox.classList.add('verse-box');
       verseBox.dataset.verse = verse.field[3];
 
-      // Handle right-click and long press for verses
+      // Right-click handler for verses
       verseBox.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        navigator.clipboard.writeText(verseText).then(() => {
-          alert('Verse copied to clipboard!');
-        });
+        toggleChapters(bookId, chapter); // Go back to the list of chapters
       });
-      verseBox.addEventListener('touchstart', handleLongPress.bind(null, 'verse', bookId, chapter));
+
+      // Long press handler for verses
+      verseBox.addEventListener('touchstart', handleLongPress('verse', bookId, chapter));
 
       booksContainer.appendChild(verseBox);
     });
@@ -163,16 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
   }
 
-  function handleLongPress(type, bookId, chapter) {
+  function handleLongPress(type, bookId = null, chapter = null) {
     let timer;
     const threshold = 500;
 
     return function (e) {
       if (e.type === 'touchstart') {
         timer = setTimeout(() => {
-          if (type === 'verse') {
+          if (type === 'verse' && bookId && chapter) {
             toggleChapters(bookId); // Go back to the list of chapters
-          } else if (type === 'chapter') {
+          } else if (type === 'chapter' && bookId) {
             displayBooks(); // Go back to the list of books
           }
         }, threshold);
