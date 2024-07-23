@@ -95,6 +95,19 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
       const verseBox = createBoxElement(verseText); // Create a box element for the verse
       verseBox.classList.add('verse-box'); // Add a class to the verse box
       verseBox.dataset.verse = verse.field[3]; // Set the verse number as a data attribute
+
+      verseBox.addEventListener('click', () => toggleChapters(bookId)); // Add event listener for left-click to toggle chapters
+      verseBox.addEventListener('contextmenu', (event) => { // Add event listener for right-click to copy verse text to clipboard
+        event.preventDefault(); // Prevent the default context menu from appearing
+        navigator.clipboard.writeText(`${verse.field[4]} - ${bookNames[bookId]} ${chapter}:${verse.field[3]}`)
+          .then(() => {
+            alert('Verse copied to clipboard');
+          })
+          .catch(err => {
+            console.error('Failed to copy text: ', err);
+          });
+      });
+
       booksContainer.appendChild(verseBox); // Append the verse box to the container
     });
 
@@ -105,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => { // Wait for the DOM to loa
       }
     }
   }
+
 
   // Get the verses for a given book and chapter
   function getVersesByBookAndChapter(bookId, chapter) {
