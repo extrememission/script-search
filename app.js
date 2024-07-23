@@ -40,11 +40,40 @@ document.addEventListener('DOMContentLoaded', () => {
       loadingMessage.textContent = 'Error loading data. Please try again later.';
     });
 
-  function createBoxElement(text) {
-    const box = document.createElement('div');
-    box.className = 'box';
-    box.innerHTML = text;
-    return box;
+  function applyUserSelectNone(element) {
+    element.style.webkitUserSelect = 'none'; // For Safari and iOS
+    element.style.userSelect = 'none'; // For other browsers
+  }
+
+  function addTouchListeners(element) {
+    element.addEventListener('touchstart', handleTouchStart, { passive: false });
+    element.addEventListener('touchend', handleTouchEnd, { passive: false });
+  }
+
+  let startX;
+  let startY;
+  function handleTouchStart(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }
+
+  function handleTouchEnd(e) {
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = endX - startX;
+    const diffY = endY - startY;
+
+    if (Math.abs(diffX) > Math.abs(diffY) && diffX < -50) { // Left swipe
+      const target = e.target;
+      if (target.classList.contains('verse-box')) {
+        const bookId = target.dataset.bookId;
+        const chapter = target.dataset.chapter;
+        toggleChapters(bookId);
+      } else if (target.classList.contains('chapter-box')) {
+        const bookId = target.dataset.bookId;
+        displayBooks();
+      }
+    }
   }
 
   function displayBooks() {
@@ -53,12 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const bookName = bookNames[bookId];
       const bookBox = createBoxElement(bookName);
       bookBox.classList.add('book-box');
-      bookBox.style.userSelect = 'none'; // Make text unelectable
+      applyUserSelectNone(bookBox); // Apply no-select
+      addTouchListeners(bookBox); // Prevent text selection
       bookBox.dataset.bookId = bookId;
       bookBox.addEventListener('click', () => toggleChapters(bookId));
 
-      // Long press and right-click handler for books
-      bookBox.addEventListener('touchstart', handleLongPress('book'));
+      // Handle right-click for books
       bookBox.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         displayBooks(); // Go back to the list of books
@@ -74,12 +103,13 @@ document.addEventListener('DOMContentLoaded', () => {
     chapters.forEach(chapter => {
       const chapterBox = createBoxElement(`Chapter ${chapter}`);
       chapterBox.classList.add('chapter-box');
-      chapterBox.style.userSelect = 'none'; // Make text unelectable
+      applyUserSelectNone(chapterBox); // Apply no-select
+      addTouchListeners(chapterBox); // Prevent text selection
       chapterBox.dataset.chapter = chapter;
+      chapterBox.dataset.bookId = bookId;
       chapterBox.addEventListener('click', () => toggleVerses(bookId, chapter));
 
-      // Long press and right-click handler for chapters
-      chapterBox.addEventListener('touchstart', handleLongPress('chapter', bookId));
+      // Handle right-click for chapters
       chapterBox.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         displayBooks(); // Go back to the list of books
@@ -107,13 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const verseBox = createBoxElement(verseText);
       verseBox.classList.add('verse-box');
       verseBox.dataset.verse = verse.field[3];
+      verseBox.dataset.bookId = bookId;
+      verseBox.dataset.chapter = chapter;
 
-      // Right-click and long press handler for verses
+      // Handle right-click and swipe for verses
       verseBox.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         toggleChapters(bookId); // Go back to the list of chapters
       });
-      verseBox.addEventListener('touchstart', handleLongPress('verse', bookId, chapter));
+      addTouchListeners(verseBox); // Prevent text selection
 
       booksContainer.appendChild(verseBox);
     });
@@ -163,23 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
   }
 
-  function handleLongPress(type, bookId, chapter) {
-    let timer;
-    const threshold = 500;
-
-    return function (e) {
-      if (e.type === 'touchstart') {
-        timer = setTimeout(() => {
-          if (type === 'verse') {
-            toggleChapters(bookId); // Go back to the list of chapters
-          } else if (type === 'chapter') {
-            displayBooks(); // Go back to the list of books
-          }
-        }, threshold);
-
-        e.target.addEventListener('touchend', () => clearTimeout(timer), { once: true });
-        e.target.addEventListener('touchcancel', () => clearTimeout(timer), { once: true });
-      }
-    };
+  function createBoxElement(text) {
+    const box = document.createElement('div');
+    box.className = 'box';
+    box.innerHTML = text;
+    return box;
   }
 });
