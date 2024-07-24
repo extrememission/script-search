@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       bibleData.push(...data.resultset.row);
       loadingMessage.classList.add('hidden');
-      displayBooks();
+      displayBooks(); // Ensure books are displayed immediately
 
       searchInput.addEventListener('keydown', event => {
         if (event.key === 'Enter') {
