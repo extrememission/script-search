@@ -22,12 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
     65: 'Jude', 66: 'Revelation'
   };
 
+  // Display books immediately
+  displayBooks();
+
+  // Fetch data
   fetch('data/kjv.json')
     .then(response => response.json())
     .then(data => {
       bibleData.push(...data.resultset.row);
       loadingMessage.classList.add('hidden');
-      displayBooks(); // Ensure books are displayed immediately
 
       searchInput.addEventListener('keydown', event => {
         if (event.key === 'Enter') {
@@ -39,6 +42,25 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error fetching Bible data:', error);
       loadingMessage.textContent = 'Error loading data. Please try again later.';
     });
+
+  function displayBooks() {
+    booksContainer.innerHTML = '';
+    for (const bookId in bookNames) {
+      const bookName = bookNames[bookId];
+      const bookBox = createBoxElement(bookName);
+      bookBox.classList.add('book-box');
+      bookBox.dataset.bookId = bookId;
+      bookBox.addEventListener('click', () => toggleChapters(bookId));
+
+      // Handle right-click for books
+      bookBox.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        displayBooks(); // Go back to the list of books
+      });
+
+      booksContainer.appendChild(bookBox);
+    }
+  }
 
   function applyUserSelectNone(element) {
     element.style.webkitUserSelect = 'none'; // For Safari and iOS
@@ -73,27 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const bookId = target.dataset.bookId;
         displayBooks();
       }
-    }
-  }
-
-  function displayBooks() {
-    booksContainer.innerHTML = '';
-    for (const bookId in bookNames) {
-      const bookName = bookNames[bookId];
-      const bookBox = createBoxElement(bookName);
-      bookBox.classList.add('book-box');
-      applyUserSelectNone(bookBox); // Apply no-select
-      addTouchListeners(bookBox); // Prevent text selection
-      bookBox.dataset.bookId = bookId;
-      bookBox.addEventListener('click', () => toggleChapters(bookId));
-
-      // Handle right-click for books
-      bookBox.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        displayBooks(); // Go back to the list of books
-      });
-
-      booksContainer.appendChild(bookBox);
     }
   }
 
