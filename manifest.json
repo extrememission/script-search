@@ -1,6 +1,6 @@
 {
-  "name": "Bible App",
-  "short_name": "Bible",
+  "name": "ScriptSearch",
+  "short_name": "ScriptSearch",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
