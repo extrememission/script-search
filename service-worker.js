@@ -1,12 +1,12 @@
 self.addEventListener('install', function(event) {
   event.waitUntil(
-    caches.open('bible-app').then(function(cache) {
+    caches.open('scriptsearch').then(function(cache) {
       return cache.addAll([
         '/',
         '/index.html',
         '/styles.css',
         '/app.js',
-        '/manifest.json',
+        '/site.webmanifest',
         '/data/kjv.json',
         'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'
       ]);
