@@ -8,7 +8,7 @@ self.addEventListener('install', function(event) {
         '/app.js',
         '/manifest.json',
         '/data/kjv.json',
-        'https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&display=swap'
+        'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'
       ]);
     })
   );
