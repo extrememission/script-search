@@ -1,6 +1,6 @@
 /* Set global styles */
 body {
-  font-family: "Raleway", sans-serif;
+font-family: "Quantico", sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
@@ -41,7 +41,7 @@ input[type="text"] {
   border: 1px solid #ffffff;
   border-radius: 5px;
   outline: none;
-  font-family: "Raleway", sans-serif;
+  font-family: "Quantico", sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
