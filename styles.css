@@ -1,9 +1,6 @@
 /* Set global styles */
 body {
 font-family: "Quantico", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
   background-color: #3c3939;
   color: white;
   text-align: center;
@@ -20,7 +17,6 @@ font-family: "Quantico", sans-serif;
 #app {
   width: 90%;
   background-color: #3c3939;
-
   padding: 20px;
 }
 
@@ -35,16 +31,13 @@ font-family: "Quantico", sans-serif;
 
 /* Style the search input field */
 input[type="text"] {
-  width: 95%;
+  font-family: "Quantico", sans-serif;
+  width: 98%;
   padding: 20px;
   text-align: center;
-  border: 1px solid #ffffff;
   border-radius: 5px;
   outline: none;
-  font-family: "Quantico", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
+ 
 }
 
 /* Style for different types of boxes */
