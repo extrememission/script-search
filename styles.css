@@ -35,7 +35,6 @@ body {
 
 /* Style the search input field */
 input[type="text"] {
-  width: 100%;
   padding: 20px;
   text-align: center;
   border: 1px solid #ffffff;
