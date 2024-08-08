@@ -32,11 +32,10 @@ font-family: "Quantico", sans-serif;
 /* Style the search input field */
 input[type="text"] {
   font-family: "Quantico", sans-serif;
-  width: 98%;
+  width: 80%;
   padding: 20px;
   text-align: center;
   border-radius: 5px;
-  outline: none;
  
 }
 
