@@ -49,6 +49,7 @@ input[type="text"] {
 
 /* Style for different types of boxes */
 .box, .book-box, .chapter-box, .verse-box, .result-box {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
