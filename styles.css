@@ -33,7 +33,7 @@ font-family: "Quantico", sans-serif;
 input[type="text"] {
   font-family: "Quantico", sans-serif;
   font-size: medium;
-  width: 80%;
+  width: 100%;
   padding: 20px;
   text-align: center;
   border-radius: 5px;
