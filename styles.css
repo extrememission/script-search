@@ -9,7 +9,7 @@ font-family: "Quantico", sans-serif;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 10;
+  margin: 0;
   line-height: 150%;
 }
 
@@ -37,6 +37,7 @@ input[type="text"] {
   padding: 20px;
   text-align: center;
   border-radius: 5px;
+  margin: 20;
  
 }
 
