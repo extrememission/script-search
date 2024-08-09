@@ -26,7 +26,7 @@ font-family: "Quantico", sans-serif;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 /* Style the search input field */
