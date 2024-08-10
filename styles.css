@@ -43,7 +43,7 @@ input[type="text"] {
 /* Style for different types of boxes */
 .box, .book-box, .chapter-box, .verse-box, .result-box {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 20px;
