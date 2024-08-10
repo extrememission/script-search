@@ -15,7 +15,7 @@ font-family: "Quantico", sans-serif;
 
 /* Style the main app container */
 #app {
-  width: 90%;
+  width: 100%;
   background-color: #3c3939;
   padding: 20px;
 }
