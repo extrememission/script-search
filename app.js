@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     booksContainer.innerHTML = '';
     const verses = getVersesByBookAndChapter(bookId, chapter);
     verses.forEach(verse => {
-      const verseText = `${verse.field[4]}<br>${bookNames[bookId]} ${chapter}:${verse.field[3]}`;
+      const verseText = `${formatVerseText(verse.field[4])}<br>${bookNames[bookId]} ${chapter}:${verse.field[3]}`;
       const verseBox = createBoxElement(verseText);
       verseBox.classList.add('verse-box');
       verseBox.dataset.verse = verse.field[3];
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const bookName = bookNames[bookId];
         const chapter = result.field[2];
         const verseNumber = result.field[3];
-        const verseText = result.field[4].replace(highlightTerm, '<span class="highlight">$1</span>');
+        const verseText = formatVerseText(result.field[4]).replace(highlightTerm, '<span class="highlight">$1</span>');
         const fullText = `${verseText}<br>${bookName} ${chapter}:${verseNumber}`;
         const resultBox = createBoxElement(fullText);
         resultBox.classList.add('result-box');
@@ -199,7 +199,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function createBoxElement(text) {
     const box = document.createElement('div');
     box.className = 'box';
+    // Format the text with line breaks before punctuation
     box.innerHTML = text;
     return box;
+  }
+
+  function formatVerseText(text) {
+    // Define a regular expression for common punctuation marks
+    const punctuationRegex = /([.,:;!?])/g;
+    
+    // Replace punctuation with a line break followed by the punctuation
+    return text.replace(punctuationRegex, '<br>$1');
   }
 });
